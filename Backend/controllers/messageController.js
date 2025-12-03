@@ -276,3 +276,84 @@ exports.deleteConversation = async (req, res) => {
     });
   }
 };
+
+// @desc    Thu hồi tin nhắn
+// @route   PUT /api/messages/:messageId/recall
+// @access  Riêng tư
+exports.recallMessage = async (req, res) => {
+  try {
+    const { messageId } = req.params;
+    const userId = req.user._id;
+
+    // Tìm tin nhắn
+    const message = await Message.findById(messageId);
+
+    if (!message) {
+      return res.status(404).json({
+        thành_công: false,
+        tin_nhan: "Tin nhắn không tồn tại",
+      });
+    }
+
+    // Kiểm tra người dùng có phải người gửi
+    if (message.senderId.toString() !== userId.toString()) {
+      return res.status(403).json({
+        thành_công: false,
+        tin_nhan: "Bạn chỉ có thể thu hồi tin nhắn của mình",
+      });
+    }
+
+    // Kiểm tra tin nhắn đã được thu hồi chưa
+    if (message.isRecalled) {
+      return res.status(400).json({
+        thành_công: false,
+        tin_nhan: "Tin nhắn này đã được thu hồi",
+      });
+    }
+
+    // Kiểm tra thời gian (có thể chỉ cho phép thu hồi trong 15 phút)
+    const fifteenMinutes = 15 * 60 * 1000;
+    const messageAge = Date.now() - new Date(message.createdAt).getTime();
+
+    if (messageAge > fifteenMinutes) {
+      return res.status(400).json({
+        thành_công: false,
+        tin_nhan: "Chỉ có thể thu hồi tin nhắn trong vòng 15 phút",
+      });
+    }
+
+    // Thu hồi tin nhắn
+    message.isRecalled = true;
+    message.recalledAt = Date.now();
+    message.content = "Tin nhắn đã được thu hồi";
+    message.images = [];
+
+    await message.save();
+
+    // Emit socket event để cập nhật real-time
+    const { io } = require("../server");
+    const conversation = await Conversation.findById(message.conversationId);
+
+    if (conversation && io) {
+      conversation.participants.forEach((participantId) => {
+        io.to(participantId.toString()).emit("message_recalled", {
+          messageId: message._id,
+          conversationId: message.conversationId,
+          message: message,
+        });
+      });
+    }
+
+    res.status(200).json({
+      thành_công: true,
+      tin_nhan: "Đã thu hồi tin nhắn",
+      dữ_liệu: message,
+    });
+  } catch (error) {
+    console.error("Lỗi thu hồi tin nhắn:", error);
+    res.status(500).json({
+      thành_công: false,
+      tin_nhan: error.message || "Lỗi máy chủ nội bộ",
+    });
+  }
+};

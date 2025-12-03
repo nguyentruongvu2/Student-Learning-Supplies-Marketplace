@@ -8,6 +8,7 @@ const {
   markMessageAsRead,
   createConversation,
   deleteConversation,
+  recallMessage,
 } = require("../controllers/messageController");
 
 // @route   GET /api/messages/conversations
@@ -39,5 +40,10 @@ router.post("/", authenticate, sendMessage);
 // @desc    Đánh dấu tin nhắn là đã đọc
 // @access  Riêng tư
 router.put("/:id/read", authenticate, markMessageAsRead);
+
+// @route   PUT /api/messages/:messageId/recall
+// @desc    Thu hồi tin nhắn
+// @access  Riêng tư
+router.put("/:messageId/recall", authenticate, recallMessage);
 
 module.exports = router;

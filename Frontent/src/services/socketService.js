@@ -52,6 +52,7 @@ export const socketEvents = {
   SEND_MESSAGE: "send_message",
   RECEIVE_MESSAGE: "receive_message",
   MESSAGE_DELIVERED: "message_delivered",
+  MESSAGE_RECALLED: "message_recalled",
 
   // Typing indicator
   USER_TYPING: "user_typing",
@@ -162,6 +163,12 @@ export const onUserStatusChanged = (callback) => {
 export const onNotification = (callback) => {
   if (socket) {
     socket.on(socketEvents.NOTIFICATION, callback);
+  }
+};
+
+export const onMessageRecalled = (callback) => {
+  if (socket) {
+    socket.on(socketEvents.MESSAGE_RECALLED, callback);
   }
 };
 

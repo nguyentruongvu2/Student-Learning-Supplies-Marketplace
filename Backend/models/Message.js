@@ -28,6 +28,13 @@ const messageSchema = new mongoose.Schema(
     },
     readAt: Date,
 
+    // Thu hồi tin nhắn
+    isRecalled: {
+      type: Boolean,
+      default: false,
+    },
+    recalledAt: Date,
+
     // Timestamps
     createdAt: {
       type: Date,

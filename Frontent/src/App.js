@@ -13,9 +13,15 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import PostDetail from "./pages/PostDetail";
 import Dashboard from "./pages/Dashboard";
 import AdminPanel from "./pages/AdminPanel";
+import AdminStats from "./pages/AdminStats";
+import AdminPosts from "./pages/AdminPosts";
+import AdminReports from "./pages/AdminReports";
+import AdminUsers from "./pages/AdminUsers";
 import Chat from "./pages/Chat";
 import MyPosts from "./pages/MyPosts";
 import CreatePost from "./pages/CreatePost";
@@ -26,6 +32,7 @@ import SavedPosts from "./pages/SavedPosts";
 // Các thành phần
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import AdminLayout from "./components/AdminLayout";
 import PrivateRoute from "./components/PrivateRoute";
 
 // Socket
@@ -53,7 +60,8 @@ function App() {
 
     if (token && userData) {
       setIsAuthenticated(true);
-      setUser(JSON.parse(userData));
+      const parsedUser = JSON.parse(userData);
+      setUser(parsedUser);
       // Khởi tạo Socket.io khi có token
       initializeSocket(token);
     }
@@ -72,6 +80,13 @@ function App() {
     };
   }, []);
 
+  // Update when user changes
+  useEffect(() => {
+    if (user) {
+      console.log("User updated:", user.role);
+    }
+  }, [user]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -86,7 +101,13 @@ function App() {
   return (
     <Router>
       <div className="min-h-screen flex flex-col bg-gray-50">
-        <Navbar user={user} isAuthenticated={isAuthenticated} />
+        {/* Hiển thị Navbar cho tất cả trang trừ login/register */}
+        <Navbar
+          user={user}
+          isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
+          setUser={setUser}
+        />
 
         <main className="flex-grow">
           <Routes>
@@ -95,14 +116,25 @@ function App() {
             <Route
               path="/login"
               element={
-                <Login
-                  setIsAuthenticated={setIsAuthenticated}
-                  setUser={setUser}
-                />
+                <div className="absolute inset-0 z-[200]">
+                  <Login
+                    setIsAuthenticated={setIsAuthenticated}
+                    setUser={setUser}
+                  />
+                </div>
               }
             />
-            <Route path="/register" element={<Register />} />
+            <Route
+              path="/register"
+              element={
+                <div className="absolute inset-0 z-[200]">
+                  <Register />
+                </div>
+              }
+            />
             <Route path="/verify-email/:token" element={<VerifyEmail />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/posts/:id" element={<PostDetail />} />
 
             {/* Tuyến Riêng tư */}
@@ -163,7 +195,7 @@ function App() {
               }
             />
 
-            {/* Tuyến Quản trị */}
+            {/* Tuyến Quản trị - Redirect từ /admin sang /admin/stats */}
             <Route
               path="/admin"
               element={
@@ -171,17 +203,35 @@ function App() {
                   isAuthenticated={isAuthenticated}
                   requireAdmin={true}
                 >
-                  <AdminPanel />
+                  <Navigate to="/admin/stats" replace />
                 </PrivateRoute>
               }
             />
+
+            {/* Admin Layout với sidebar */}
+            <Route
+              path="/admin/*"
+              element={
+                <PrivateRoute
+                  isAuthenticated={isAuthenticated}
+                  requireAdmin={true}
+                >
+                  <AdminLayout />
+                </PrivateRoute>
+              }
+            >
+              <Route path="stats" element={<AdminStats />} />
+              <Route path="posts" element={<AdminPosts />} />
+              <Route path="reports" element={<AdminReports />} />
+              <Route path="users" element={<AdminUsers />} />
+            </Route>
 
             {/* 404 */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
 
-        <Footer />
+        {!(user?.role === "admin") && <Footer />}
         <ToastContainer position="bottom-right" autoClose={3000} />
       </div>
     </Router>
