@@ -102,6 +102,8 @@ app.use("/api/posts", require("./routes/postRoutes"));
 app.use("/api/comments", require("./routes/commentRoutes"));
 app.use("/api/reports", require("./routes/reportRoutes"));
 app.use("/api/messages", require("./routes/messageRoutes"));
+app.use("/api/admin/stats", require("./routes/statsRoutes"));
+app.use("/api/admin/audit-logs", require("./routes/auditLogRoutes"));
 // Upload routes
 app.use("/api/upload", require("./routes/uploadRoutes"));
 

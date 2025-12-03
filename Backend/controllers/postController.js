@@ -7,7 +7,21 @@ const { getPaginationParams } = require("../utils/helpers");
 // @access  Công khai
 exports.getAllPosts = async (req, res) => {
   try {
-    const { category, postType, search, sort, page, limit, status } = req.query;
+    const {
+      category,
+      postType,
+      search,
+      sort,
+      page,
+      limit,
+      status,
+      priceMin,
+      priceMax,
+      dateFilter,
+      conditions,
+      negotiableOnly,
+    } = req.query;
+
     const { skip, lim, pageNum } = getPaginationParams(page, limit);
 
     let query = {};
@@ -25,6 +39,52 @@ exports.getAllPosts = async (req, res) => {
     // Lọc theo danh mục
     if (category) query.category = category;
 
+    // Lọc theo khoảng giá
+    if (priceMin !== undefined || priceMax !== undefined) {
+      query.price = {};
+      if (priceMin !== undefined && priceMin !== "null") {
+        query.price.$gte = Number(priceMin);
+      }
+      if (priceMax !== undefined && priceMax !== "null") {
+        query.price.$lte = Number(priceMax);
+      }
+    }
+
+    // Lọc theo tình trạng
+    if (conditions) {
+      const conditionArray = conditions.split(",").map((c) => c.trim());
+      if (conditionArray.length > 0) {
+        query.condition = { $in: conditionArray };
+      }
+    }
+
+    // Lọc chỉ giá có thể thương lượng
+    if (negotiableOnly === "true") {
+      query.negotiable = true;
+    }
+
+    // Lọc theo thời gian đăng
+    if (dateFilter) {
+      const now = new Date();
+      let startDate;
+
+      switch (dateFilter) {
+        case "today":
+          startDate = new Date(now.setHours(0, 0, 0, 0));
+          break;
+        case "week":
+          startDate = new Date(now.setDate(now.getDate() - 7));
+          break;
+        case "month":
+          startDate = new Date(now.setMonth(now.getMonth() - 1));
+          break;
+      }
+
+      if (startDate) {
+        query.createdAt = { $gte: startDate };
+      }
+    }
+
     // Tìm kiếm theo tiêu đề và mô tả
     if (search && search.trim()) {
       query.$or = [
@@ -36,10 +96,29 @@ exports.getAllPosts = async (req, res) => {
     console.log("📊 getAllPosts Query:", JSON.stringify(query));
     console.log("🔍 Search term:", search);
 
-    let sortOption = { createdAt: -1 };
-    if (sort === "price_asc") sortOption = { price: 1 };
-    if (sort === "price_desc") sortOption = { price: -1 };
-    if (sort === "views") sortOption = { views: -1 };
+    // Sắp xếp
+    let sortOption = { createdAt: -1 }; // Mặc định: mới nhất
+
+    switch (sort) {
+      case "oldest":
+        sortOption = { createdAt: 1 };
+        break;
+      case "price_asc":
+        sortOption = { price: 1 };
+        break;
+      case "price_desc":
+        sortOption = { price: -1 };
+        break;
+      case "most_viewed":
+        sortOption = { viewCount: -1 };
+        break;
+      case "most_saved":
+        sortOption = { saveCount: -1 };
+        break;
+      case "newest":
+      default:
+        sortOption = { createdAt: -1 };
+    }
 
     const posts = await Post.find(query)
       .populate("sellerId", "fullName avatar rating")

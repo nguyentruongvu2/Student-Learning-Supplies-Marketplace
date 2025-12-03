@@ -28,7 +28,10 @@
 
 ### Client Configuration
 
-- `FRONTEND_URL`: Frontend URL for CORS (default: http://localhost:3000)
+- `FRONTEND_URL`: Frontend URL for CORS and email links
+  - Localhost (same machine): `http://localhost:3000`
+  - LAN (different machines): `http://192.168.x.x:3000` (replace with your IP)
+  - **Important**: When using LAN IP, frontend must also use `REACT_APP_API_URL=http://192.168.x.x:5000`
 
 ### File Upload
 

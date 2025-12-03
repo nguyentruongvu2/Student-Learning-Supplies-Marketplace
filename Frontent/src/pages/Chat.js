@@ -12,6 +12,7 @@ import {
   notifyStopTyping,
   notifyUserOnline,
   onUserStatusChanged,
+  onMessageRecalled,
   removeMessageListener,
   removeTypingListener,
 } from "../services/socketService";
@@ -272,6 +273,25 @@ const Chat = () => {
       }
     });
 
+    // Tin nhắn bị thu hồi
+    onMessageRecalled((data) => {
+      if (data.conversationId === selectedConversation._id) {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg._id === data.messageId
+              ? {
+                  ...msg,
+                  isRecalled: true,
+                  recalledAt: data.message.recalledAt,
+                  content: "Tin nhắn đã được thu hồi",
+                  images: [],
+                }
+              : msg
+          )
+        );
+      }
+    });
+
     return () => {
       removeMessageListener();
       removeTypingListener();
@@ -412,9 +432,9 @@ const Chat = () => {
 
             {/* Chat Window */}
             {selectedConversation && (
-              <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg flex flex-col overflow-hidden border-2 border-gray-100">
-                {/* Header */}
-                <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-5 border-b-4 border-blue-700">
+              <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg flex flex-col h-[calc(100vh-8rem)] border-2 border-gray-100">
+                {/* Header - Cố định */}
+                <div className="flex-shrink-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-5 border-b-4 border-blue-700">
                   <div className="flex items-center gap-3">
                     <div className="relative">
                       <div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center font-bold text-lg">
@@ -473,7 +493,7 @@ const Chat = () => {
                   </div>
                 </div>
 
-                {/* Messages */}
+                {/* Messages - Scroll ở đây */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
                   {messages.length === 0 ? (
                     <div className="text-center py-12 text-gray-500">
@@ -512,11 +532,13 @@ const Chat = () => {
                           <div
                             className={`flex ${
                               isOwn ? "justify-end" : "justify-start"
-                            }`}
+                            } group`}
                           >
                             <div
-                              className={`max-w-xs px-5 py-3 rounded-2xl shadow-md ${
-                                isOwn
+                              className={`max-w-xs px-5 py-3 rounded-2xl shadow-md relative ${
+                                msg.isRecalled
+                                  ? "bg-gray-100 text-gray-500 italic border-2 border-gray-300"
+                                  : isOwn
                                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-br-none"
                                   : "bg-white text-gray-800 border-2 border-gray-200 rounded-bl-none"
                               }`}
@@ -526,7 +548,11 @@ const Chat = () => {
                               </p>
                               <div
                                 className={`flex items-center gap-2 text-xs mt-2 ${
-                                  isOwn ? "text-blue-100" : "text-gray-500"
+                                  msg.isRecalled
+                                    ? "text-gray-400"
+                                    : isOwn
+                                    ? "text-blue-100"
+                                    : "text-gray-500"
                                 }`}
                               >
                                 <span>
@@ -535,10 +561,67 @@ const Chat = () => {
                                     minute: "2-digit",
                                   })}
                                 </span>
-                                {isOwn && msg.isRead && (
+                                {isOwn && msg.isRead && !msg.isRecalled && (
                                   <span className="text-blue-200">✓✓</span>
                                 )}
                               </div>
+
+                              {/* Nút thu hồi tin nhắn */}
+                              {isOwn && !msg.isRecalled && (
+                                <button
+                                  onClick={async () => {
+                                    if (
+                                      window.confirm(
+                                        "Bạn có chắc muốn thu hồi tin nhắn này?"
+                                      )
+                                    ) {
+                                      try {
+                                        const response =
+                                          await messageAPI.recallMessage(
+                                            msg._id
+                                          );
+                                        toast.success("Đã thu hồi tin nhắn");
+
+                                        // Cập nhật local state ngay lập tức
+                                        setMessages((prev) =>
+                                          prev.map((m) =>
+                                            m._id === msg._id
+                                              ? {
+                                                  ...m,
+                                                  isRecalled: true,
+                                                  recalledAt: Date.now(),
+                                                  content:
+                                                    "Tin nhắn đã được thu hồi",
+                                                  images: [],
+                                                }
+                                              : m
+                                          )
+                                        );
+                                      } catch (error) {
+                                        toast.error(
+                                          error.response?.data?.tin_nhan ||
+                                            "Không thể thu hồi tin nhắn"
+                                        );
+                                      }
+                                    }
+                                  }}
+                                  className="absolute -left-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 shadow-lg"
+                                  title="Thu hồi tin nhắn (trong 15 phút)"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4"
+                                    viewBox="0 0 20 20"
+                                    fill="currentColor"
+                                  >
+                                    <path
+                                      fillRule="evenodd"
+                                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                      clipRule="evenodd"
+                                    />
+                                  </svg>
+                                </button>
+                              )}
                             </div>
                           </div>
                         </React.Fragment>
@@ -559,7 +642,7 @@ const Chat = () => {
                 </div>
 
                 {/* Input */}
-                <div className="p-5 border-t-4 border-gray-200 bg-white flex gap-3">
+                <div className="p-5 border-t-4 border-gray-200 bg-white flex-shrink-0 flex gap-3 items-end">
                   <textarea
                     value={messageText}
                     onChange={handleInputChange}
@@ -570,13 +653,22 @@ const Chat = () => {
                       }
                     }}
                     placeholder="Nhập tin nhắn..."
-                    className="flex-1 px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none text-base"
-                    rows="3"
+                    className="flex-1 px-5 py-3 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none text-base min-h-[44px] max-h-[200px]"
+                    rows="1"
+                    style={{
+                      height: "auto",
+                      overflowY:
+                        messageText.split("\n").length > 5 ? "auto" : "hidden",
+                    }}
+                    onInput={(e) => {
+                      e.target.style.height = "44px";
+                      e.target.style.height = e.target.scrollHeight + "px";
+                    }}
                   />
                   <button
                     onClick={handleSendMessage}
                     disabled={sending || !messageText.trim()}
-                    className="px-6 h-fit bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transform transition-all duration-300 disabled:opacity-50 disabled:scale-100 font-bold flex items-center gap-2"
+                    className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl hover:shadow-lg hover:scale-105 transform transition-all duration-300 disabled:opacity-50 disabled:scale-100 font-bold flex items-center gap-2"
                   >
                     {sending ? (
                       <>

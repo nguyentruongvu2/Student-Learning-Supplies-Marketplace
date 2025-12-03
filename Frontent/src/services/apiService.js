@@ -9,7 +9,15 @@ export const authAPI = {
   },
 
   login: async (email, password) => {
+    console.log("📡 apiService.login called");
+    console.log("📧 Email:", email);
+    console.log("🔑 Password length:", password?.length);
+    console.log("🔗 Endpoint: /auth/login");
+
     const response = await api.post("/auth/login", { email, password });
+    console.log("📥 Response status:", response.status);
+    console.log("📦 Response data:", response.data);
+
     return response.data;
   },
 
@@ -78,7 +86,12 @@ export const postAPI = {
     category = null,
     postType = null,
     search = null,
-    sort = null
+    sort = null,
+    priceMin = null,
+    priceMax = null,
+    dateFilter = null,
+    conditions = null,
+    negotiableOnly = false
   ) => {
     const params = new URLSearchParams();
     params.append("page", page);
@@ -87,6 +100,11 @@ export const postAPI = {
     if (postType) params.append("postType", postType);
     if (search) params.append("search", search);
     if (sort) params.append("sort", sort);
+    if (priceMin !== null) params.append("priceMin", priceMin);
+    if (priceMax !== null) params.append("priceMax", priceMax);
+    if (dateFilter) params.append("dateFilter", dateFilter);
+    if (conditions) params.append("conditions", conditions);
+    if (negotiableOnly) params.append("negotiableOnly", "true");
 
     const response = await api.get(`/posts?${params.toString()}`);
     return response.data;
@@ -232,17 +250,8 @@ export const reportAPI = {
     return response.data;
   },
 
-  updateReport: async (
-    reportId,
-    status,
-    action = null,
-    adminResponse = null
-  ) => {
-    const response = await api.put(`/reports/${reportId}`, {
-      status,
-      action,
-      adminResponse,
-    });
+  updateReport: async (reportId, data) => {
+    const response = await api.put(`/reports/${reportId}`, data);
     return response.data;
   },
 
@@ -307,6 +316,11 @@ export const messageAPI = {
 
   markMessageAsRead: async (messageId) => {
     const response = await api.put(`/messages/${messageId}/read`);
+    return response.data;
+  },
+
+  recallMessage: async (messageId) => {
+    const response = await api.put(`/messages/${messageId}/recall`);
     return response.data;
   },
 };
