@@ -7,10 +7,14 @@ import {
   FaClock,
 } from "react-icons/fa";
 
+/**
+ * Component PostCard - Hiển thị thông tin bài đăng dạng thẻ
+ * Được sử dụng trong danh sách bài đăng, trang chủ
+ */
 const PostCard = ({ post, onClick }) => {
   const [imageError, setImageError] = useState(false);
 
-  // Function to calculate time ago
+  // Hàm tính thời gian đã đăng (relative time)
   const getTimeAgo = (date) => {
     const now = new Date();
     const postDate = new Date(date);
@@ -29,7 +33,7 @@ const PostCard = ({ post, onClick }) => {
       onClick={onClick}
       className="bg-white rounded-lg shadow hover:shadow-xl transition-all cursor-pointer overflow-hidden hover:scale-105 duration-200 border border-gray-200"
     >
-      {/* Image Container - Smaller */}
+      {/* Container hình ảnh */}
       <div className="relative w-full h-40 bg-gradient-to-br from-gray-200 to-gray-300 overflow-hidden group">
         {post.images && post.images.length > 0 && !imageError ? (
           <>
@@ -42,6 +46,7 @@ const PostCard = ({ post, onClick }) => {
                 setImageError(true);
               }}
             />
+            {/* Badge hiển thị số lượng ảnh */}
             {post.images.length > 1 && (
               <div className="absolute top-3 right-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-lg text-xs font-bold">
                 +{post.images.length - 1}

@@ -12,6 +12,10 @@ import {
   FaTimes,
 } from "react-icons/fa";
 
+/**
+ * Component Navbar - Thanh điều hướng chính của ứng dụng
+ * Hiển thị menu, tìm kiếm, và thông tin người dùng
+ */
 const Navbar = ({
   user,
   isAuthenticated,
@@ -25,7 +29,7 @@ const Navbar = ({
   const [searchHistory, setSearchHistory] = useState([]);
   const navigate = useNavigate();
 
-  // Load search history from localStorage
+  // Tải lịch sử tìm kiếm từ localStorage
   useEffect(() => {
     const savedHistory = localStorage.getItem("searchHistory");
     if (savedHistory) {
@@ -33,33 +37,33 @@ const Navbar = ({
     }
   }, []);
 
-  // Save search to history
+  // Lưu từ khóa tìm kiếm vào lịch sử
   const saveSearchToHistory = (searchTerm) => {
     if (!searchTerm || searchTerm.trim() === "") return;
 
     const trimmedSearch = searchTerm.trim();
     let history = [...searchHistory];
 
-    // Remove if already exists
+    // Xóa nếu đã tồn tại
     history = history.filter((item) => item !== trimmedSearch);
 
-    // Add to beginning
+    // Thêm vào đầu danh sách
     history.unshift(trimmedSearch);
 
-    // Keep only last 10
+    // Giữ lại 10 tìm kiếm gần nhất
     history = history.slice(0, 10);
 
     setSearchHistory(history);
     localStorage.setItem("searchHistory", JSON.stringify(history));
   };
 
-  // Clear search history
+  // Xóa toàn bộ lịch sử tìm kiếm
   const clearSearchHistory = () => {
     setSearchHistory([]);
     localStorage.removeItem("searchHistory");
   };
 
-  // Remove single item from search history
+  // Xóa một mục trong lịch sử tìm kiếm
   const removeSearchItem = (indexToRemove) => {
     const updatedHistory = searchHistory.filter(
       (_, index) => index !== indexToRemove
@@ -68,6 +72,7 @@ const Navbar = ({
     localStorage.setItem("searchHistory", JSON.stringify(updatedHistory));
   };
 
+  // Danh sách gợi ý tìm kiếm
   const searchSuggestions = [
     "📚 Sách giáo khoa",
     "📓 Vở ghi chú",

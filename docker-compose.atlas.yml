@@ -1,5 +1,5 @@
 services:
-  # Backend API - Ket noi MongoDB Atlas
+  # Backend API with MongoDB Atlas
   backend:
     build:
       context: ./Backend
@@ -9,6 +9,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 5000
+      # Use MongoDB Atlas from .env
       MONGODB_URI: ${MONGODB_URI}
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRE: 30d
