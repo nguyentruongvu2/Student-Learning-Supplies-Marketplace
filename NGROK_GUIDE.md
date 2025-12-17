@@ -1,27 +1,42 @@
-# 🌐 Email Verification với Ngrok
+# 📱 Hướng dẫn Ngrok - Truy cập Website từ Điện thoại
 
 ## 📋 Vấn đề
 
-Khi test email verification/reset password từ máy khác hoặc điện thoại, link trong email sẽ là `http://localhost:3000/...` và không hoạt động vì chỉ trỏ đến máy local.
+- Khi chạy ứng dụng trên `localhost`, chỉ truy cập được từ máy tính đang chạy
+- Không thể test trên điện thoại hoặc chia sẻ cho người khác
+- Link email verification/reset password không hoạt động trên thiết bị khác
 
 ## ✅ Giải pháp: Sử dụng Ngrok
 
-Ngrok tạo public URL trỏ về localhost, cho phép truy cập từ mọi thiết bị.
+Ngrok tạo **public URL** (HTTPS) trỏ về localhost, cho phép:
 
-## 🚀 Cài đặt Ngrok
+- ✅ Truy cập từ điện thoại
+- ✅ Chia sẻ với bạn bè/đồng nghiệp
+- ✅ Test email verification/reset password
+- ✅ HTTPS miễn phí (không cần SSL certificate)
 
-### Windows (PowerShell):
+## 🚀 Bước 1: Cài đặt Ngrok
+
+### Windows (PowerShell - Khuyên dùng):
+
+#### Cách 1: Tải trực tiếp (Đơn giản nhất)
 
 ```powershell
-# Cách 1: Tải từ website
-# 1. Truy cập https://ngrok.com/download
-# 2. Tải ngrok.exe
-# 3. Giải nén và copy vào thư mục trong PATH
+# 1. Mở https://ngrok.com/download
+# 2. Click "Download for Windows"
+# 3. Giải nén file ZIP vừa tải
+# 4. Copy ngrok.exe vào thư mục dự án (D:\DACN\)
+```
 
-# Cách 2: Dùng Chocolatey
+#### Cách 2: Dùng Chocolatey (Nếu đã cài)
+
+```powershell
 choco install ngrok
+```
 
-# Cách 3: Dùng Scoop
+#### Cách 3: Dùng Scoop (Nếu đã cài)
+
+```powershell
 scoop install ngrok
 ```
 
@@ -33,50 +48,151 @@ brew install ngrok/ngrok/ngrok
 
 # Linux (Snap)
 sudo snap install ngrok
+
+# Linux (Manual)
+curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+sudo apt update && sudo apt install ngrok
 ```
 
-## 🔑 Đăng ký và Xác thực
+## 🎯 Bước 3: Chạy với Ngrok
 
-1. **Đăng ký tài khoản miễn phí**: https://dashboard.ngrok.com/signup
-2. **Lấy authtoken**: https://dashboard.ngrok.com/get-started/your-authtoken
-3. **Cấu hình authtoken**:
+### Phương án 1: Chạy trên Docker (Khuyên dùng)
+
+#### 1. Khởi động Docker
 
 ```powershell
-ngrok config add-authtoken YOUR_AUTH_TOKEN
+# Terminal 1: Khởi động ứng dụng
+docker-compose up -d
+
+# Kiểm tra đang chạy
+docker-compose ps
 ```
 
-## 🎯 Sử dụng
+#### 2. Chạy Ngrok cho Frontend
 
-### 1. Chạy Backend và Frontend
+```powershell
+# Terminal 2: Chạy ngrok
+ngrok http 3000
+```
+
+#### 3. Copy URL từ Ngrok
+
+```
+Forwarding    https://abc123.ngrok-free.app -> http://localhost:3000
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              Copy URL này
+```
+
+#### 4. Cập nhật Backend
+
+```powershell
+# Mở file .env
+notepad .env
+
+# Thêm/sửa dòng này:
+CLIENT_URL=https://abc123.ngrok-free.app
+FRONTEND_URL=https://abc123.ngrok-free.app
+```
+
+#### 5. Restart Backend
+
+```powershell
+docker-compose restart backend
+```
+
+#### 6. Truy cập từ điện thoại
+
+- Mở trình duyệt trên điện thoại
+- Truy cập: `https://abc123.ngrok-free.app`
+- Bấm "Visit Site" (ngrok sẽ hỏi lần đầu)
+
+---
+
+### Phương án 2: Chạy Development Mode
+
+#### 1. Chạy Backend và Frontend
 
 ```powershell
 # Terminal 1: Backend
-cd D:\DACN\Backend
+cd Backend
 npm start
 
 # Terminal 2: Frontend
-cd D:\DACN\Frontent
+cd Frontent
 npm start
 ```
 
-### 2. Chạy Ngrok cho Frontend
+#### 2. Chạy Ngrok cho Frontend
 
 ```powershell
 # Terminal 3: Ngrok
 ngrok http 3000
 ```
 
-**Output mẫu:**
+#### 3. Cập nhật Backend .env
 
+```env
+# Backend/.env
+FRONTEND_URL=https://abc123.ngrok-free.app
+CLIENT_URL=https://abc123.ngrok-free.app
 ```
-Session Status                online
-Account                       your-email@gmail.com
-Version                       3.x.x
-Region                        Asia Pacific (ap)
-Latency                       45ms
-Web Interface                 http://127.0.0.1:4040
-Forwarding                    https://abc123.ngrok-free.app -> http://localhost:3000
+
+#### 4. Restart Backend (Ctrl+C và npm start lại)
+
+---
+
+## 📱 Bước 4: Truy cập từ Điện thoại
+
+### Trên điện thoại của bạn:
+
+1. **Mở trình duyệt** (Chrome/Safari)
+2. **Nhập URL** từ ngrok: `https://abc123.ngrok-free.app`
+3. **Bấm "Visit Site"** (Ngrok warning - chỉ xuất hiện lần đầu)
+4. **Website hiển thị!** 🎉
+
+### Lưu ý:
+
+- ✅ URL có SSL (HTTPS) - bảo mật
+- ✅ Hoạt động trên mọi mạng (4G/5G/WiFi)
+- ⚠️ URL thay đổi mỗi lần chạy ngrok (free plan)
+- ⚠️ Giữ terminal ngrok mở, đóng = mất kết nối
+
+---
+
+## 🔄 Chạy Ngrok cho cả Backend (Nâng cao)
+
+Nếu muốn Backend cũng public (chat realtime, API từ app mobile):
+
+```powershell
+# Terminal 3: Ngrok Backend
+ngrok http 5000
+
+# Terminal 4: Ngrok Frontend
+ngrok http 3000
 ```
+
+Cập nhật Frontend để gọi API qua ngrok:
+
+```javascript
+// Frontent/src/services/apiService.js
+const API_URL = "https://def456.ngrok-free.app/api"; // Backend ngrok URL
+```
+
+---
+
+## 📧 Test Email Verification
+
+### Đăng ký tài khoản mới online
+
+Account your-email@gmail.com
+Version 3.x.x
+Region Asia Pacific (ap)
+Latency 45ms
+Web Interface http://127.0.0.1:4040
+Forwarding https://abc123.ngrok-free.app -> http://localhost:3000
+
+````
 
 ### 3. Cập nhật Backend .env
 
@@ -86,7 +202,7 @@ Copy URL từ ngrok (ví dụ: `https://abc123.ngrok-free.app`) và cập nhật
 # Backend/.env
 FRONTEND_URL=https://abc123.ngrok-free.app
 CLIENT_URL=https://abc123.ngrok-free.app
-```
+````
 
 ### 4. Restart Backend
 
