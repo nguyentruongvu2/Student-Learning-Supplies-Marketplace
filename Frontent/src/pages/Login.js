@@ -92,7 +92,9 @@ const Login = ({ setIsAuthenticated, setUser }) => {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
             Chào mừng trở lại!
           </h1>
-          <p className="text-gray-500 text-sm">Đăng nhập vào Chợ Sinh Viên</p>
+          <p className="text-gray-500 text-sm">
+            Đăng nhập vào Chợ Đồ Cũ Sinh Viên
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">

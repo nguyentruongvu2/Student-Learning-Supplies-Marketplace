@@ -43,6 +43,8 @@ services:
     build:
       context: ./Frontent
       dockerfile: Dockerfile
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://host.docker.internal:5000/api}
     container_name: nha-cho-frontend
     restart: unless-stopped
     ports:

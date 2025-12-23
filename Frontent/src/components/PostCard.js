@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { resolveUrl } from "../utils/resolveUrl";
 import {
   FaEye,
   FaComment,
@@ -38,7 +39,7 @@ const PostCard = ({ post, onClick }) => {
         {post.images && post.images.length > 0 && !imageError ? (
           <>
             <img
-              src={post.images[0]}
+              src={resolveUrl(post.images[0])}
               alt={post.title}
               className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
               onError={() => {

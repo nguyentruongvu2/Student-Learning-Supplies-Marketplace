@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { postAPI } from "../services/apiService";
+import ImageUpload from "../components/ImageUpload";
 
 const EditPost = () => {
   const { id } = useParams();
@@ -69,6 +70,13 @@ const EditPost = () => {
     }));
   };
 
+  const handleImagesChange = (images) => {
+    setFormData((prev) => ({
+      ...prev,
+      images,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -95,6 +103,7 @@ const EditPost = () => {
         condition: formData.condition,
         location: formData.location,
         postType: formData.postType,
+        images: formData.images,
       };
 
       const response = await postAPI.updatePost(id, updateData);
@@ -115,19 +124,19 @@ const EditPost = () => {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-12 text-center">
+      <div className="max-w-xl mx-auto px-4 py-12 text-center">
         <p className="text-gray-600">Đang tải...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12">
-      <h1 className="text-3xl font-bold mb-8">Chỉnh sửa bài đăng</h1>
+    <div className="max-w-xl mx-auto px-4 py-12">
+      <h1 className="text-2xl font-bold mb-6">Chỉnh sửa bài đăng</h1>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg shadow-md p-8 space-y-6"
+        className="bg-white rounded-lg shadow-md p-6 space-y-5"
       >
         {/* Tiêu đề */}
         <div>
@@ -251,19 +260,24 @@ const EditPost = () => {
             <label className="block text-gray-700 font-bold mb-2">
               Hình ảnh hiện tại
             </label>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-4 gap-3">
               {formData.images.map((img, idx) => (
                 <div key={idx} className="relative">
                   <img
                     src={img}
                     alt={`Ảnh ${idx + 1}`}
-                    className="w-full h-24 object-cover rounded-lg"
+                    className="w-full h-20 object-cover rounded-lg"
                   />
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        {/* Upload / update images */}
+        <div>
+          <ImageUpload onImagesChange={handleImagesChange} maxImages={6} />
+        </div>
 
         {/* Nút hành động */}
         <div className="flex gap-4 pt-6">

@@ -11,6 +11,9 @@ RUN npm ci
 
 # Copy source code
 COPY . .
+# Allow REACT_APP_API_URL to be passed at build time
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
 
 # Build production
 RUN npm run build

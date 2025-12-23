@@ -25,10 +25,8 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -91,7 +89,7 @@ const Register = () => {
             Tạo tài khoản mới
           </h1>
           <p className="text-gray-500 text-sm">
-            Tham gia cộng đồng Chợ Sinh Viên
+            Tham gia cộng đồng Chợ Đồ Cũ Sinh Viên
           </p>
         </div>
 
@@ -138,18 +136,15 @@ const Register = () => {
                 <MdSchool className="text-purple-600" />
                 Trường
               </label>
-              <select
+              <input
+                type="text"
                 name="university"
                 value={formData.university}
                 onChange={handleChange}
                 className="w-full px-3 py-2.5 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-200 transition-all duration-200 text-gray-800 text-sm"
-              >
-                <option value="">Chọn trường</option>
-                <option value="Đại học Bách Khoa">Bách Khoa</option>
-                <option value="Đại học Kinh tế">Kinh tế</option>
-                <option value="Đại học Công nghệ thông tin">CNTT</option>
-                <option value="Khác">Khác</option>
-              </select>
+                placeholder="Tên trường của bạn"
+                required
+              />
             </div>
 
             {/* Major */}

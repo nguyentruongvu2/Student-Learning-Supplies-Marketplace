@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { resolveUrl } from "../utils/resolveUrl";
 import { commentAPI } from "../services/apiService";
 import { toast } from "react-toastify";
 
@@ -145,7 +146,7 @@ const CommentItem = ({
             {/* Avatar */}
             <img
               src={
-                localComment.commenterId?.avatar ||
+                resolveUrl(localComment.commenterId?.avatar) ||
                 "https://via.placeholder.com/40?text=👤"
               }
               alt=""

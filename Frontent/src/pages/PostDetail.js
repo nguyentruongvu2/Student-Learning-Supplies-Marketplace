@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { resolveUrl } from "../utils/resolveUrl";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { postAPI, commentAPI, reportAPI } from "../services/apiService";
@@ -387,7 +388,7 @@ const PostDetail = () => {
                   style={{ minHeight: "400px", maxHeight: "600px" }}
                 >
                   <img
-                    src={image}
+                    src={resolveUrl(image)}
                     alt={`${post.title} - Hình ${index + 1}`}
                     className="w-full h-full object-contain cursor-pointer hover:opacity-90 transition"
                     style={{ maxHeight: "600px" }}

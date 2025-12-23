@@ -21,6 +21,7 @@ import {
   MdStar,
   MdVisibility,
 } from "react-icons/md";
+import { resolveUrl } from "../utils/resolveUrl";
 
 const Profile = ({ user }) => {
   const [profile, setProfile] = useState(null);
@@ -213,7 +214,7 @@ const Profile = ({ user }) => {
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-2xl mx-auto px-4">
         {/* Profile Card */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
           {/* Cover */}
@@ -226,7 +227,7 @@ const Profile = ({ user }) => {
               <div className="relative">
                 {avatarPreview || profile.avatar ? (
                   <img
-                    src={avatarPreview || profile.avatar}
+                    src={resolveUrl(avatarPreview || profile.avatar)}
                     alt="Avatar"
                     className="w-24 h-24 rounded-xl object-cover shadow-lg border-4 border-white -mt-12"
                   />
