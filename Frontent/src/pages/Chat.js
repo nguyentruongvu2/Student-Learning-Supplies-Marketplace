@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { messageAPI } from "../services/apiService";
+import { resolveUrl } from "../utils/resolveUrl";
 import { FaPaperPlane, FaUser, FaSearch } from "react-icons/fa";
 import {
   getSocket,
@@ -377,15 +378,29 @@ const Chat = () => {
                       }`}
                     >
                       <div className="flex items-center gap-3 mb-2">
-                        <div
-                          className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
-                            isSelected
-                              ? "bg-blue-400"
-                              : "bg-gradient-to-br from-blue-400 to-indigo-600"
-                          }`}
-                        >
-                          {otherUser?.fullName?.charAt(0) || "?"}
-                        </div>
+                        {otherUser?.avatar ? (
+                          <img
+                            src={resolveUrl(otherUser.avatar)}
+                            alt="Avatar"
+                            className="w-10 h-10 rounded-full object-cover"
+                            onError={(e) => {
+                              e.target.onerror = null;
+                              e.target.src =
+                                "https://via.placeholder.com/40?text=" +
+                                (otherUser?.fullName?.charAt(0) || "?");
+                            }}
+                          />
+                        ) : (
+                          <div
+                            className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+                              isSelected
+                                ? "bg-blue-400"
+                                : "bg-gradient-to-br from-blue-400 to-indigo-600"
+                            }`}
+                          >
+                            {otherUser?.fullName?.charAt(0) || "?"}
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <p className="font-bold truncate">
                             {otherUser?.fullName || "Ẩn danh"}
@@ -437,11 +452,29 @@ const Chat = () => {
                 <div className="flex-shrink-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white p-5 border-b-4 border-blue-700">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center font-bold text-lg">
-                        {getOtherParticipant(
-                          selectedConversation
-                        )?.fullName?.charAt(0) || "?"}
-                      </div>
+                      {getOtherParticipant(selectedConversation)?.avatar ? (
+                        <img
+                          src={resolveUrl(
+                            getOtherParticipant(selectedConversation).avatar
+                          )}
+                          alt="Avatar"
+                          className="w-12 h-12 rounded-full object-cover border-2 border-white"
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src =
+                              "https://via.placeholder.com/48?text=" +
+                              (getOtherParticipant(
+                                selectedConversation
+                              )?.fullName?.charAt(0) || "?");
+                          }}
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-blue-400 flex items-center justify-center font-bold text-lg border-2 border-white">
+                          {getOtherParticipant(
+                            selectedConversation
+                          )?.fullName?.charAt(0) || "?"}
+                        </div>
+                      )}
                       {/* Online status indicator */}
                       {getOtherParticipant(selectedConversation)?.isOnline && (
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>

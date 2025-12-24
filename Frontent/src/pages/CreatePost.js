@@ -76,25 +76,25 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
-      <div className="max-w-4xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
+      <div className="max-w-3xl mx-auto px-4">
         {/* Header */}
-        <div className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-800 mb-3">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">
             ✨ Tạo bài đăng mới
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-base text-gray-600">
             Chia sẻ dụng cụ của bạn với cộng đồng sinh viên
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl shadow-2xl p-8 border-2 border-gray-100"
+          className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
         >
           {/* Tiêu đề */}
-          <div className="mb-8">
-            <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+          <div className="mb-6">
+            <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
               📝 Tiêu đề <span className="text-red-500 ml-1">*</span>
             </label>
             <input
@@ -102,23 +102,23 @@ const CreatePost = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
               placeholder="vd: Sách Toán Rời Rạc - Như mới"
               required
             />
           </div>
 
           {/* Category & Post Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+              <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
                 📂 Danh mục <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
                 required
               >
                 <option value="">Chọn danh mục</option>
@@ -133,14 +133,14 @@ const CreatePost = () => {
             </div>
 
             <div>
-              <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+              <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
                 🏷️ Loại bài <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="postType"
                 value={formData.postType}
                 onChange={handleChange}
-                className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
               >
                 <option value="ban">💰 Bán</option>
                 <option value="trao_doi">🔄 Trao đổi</option>
@@ -149,16 +149,16 @@ const CreatePost = () => {
           </div>
 
           {/* Condition & Price */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             <div>
-              <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+              <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
                 ✨ Tình trạng <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="condition"
                 value={formData.condition}
                 onChange={handleChange}
-                className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg"
+                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
                 required
               >
                 <option value="">Chọn tình trạng</option>
@@ -171,11 +171,11 @@ const CreatePost = () => {
 
             {formData.postType === "ban" && (
               <div>
-                <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+                <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
                   💵 Giá (VNĐ) <span className="text-red-500 ml-1">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-5 top-4 text-2xl text-green-600">
+                  <span className="absolute left-4 top-3 text-xl text-green-600">
                     ₫
                   </span>
                   <input
@@ -183,7 +183,7 @@ const CreatePost = () => {
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg"
+                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
                     placeholder="50000"
                   />
                 </div>
@@ -192,24 +192,24 @@ const CreatePost = () => {
           </div>
 
           {/* Mô tả */}
-          <div className="mb-8">
-            <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+          <div className="mb-6">
+            <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
               📖 Mô tả <span className="text-red-500 ml-1">*</span>
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg resize-none"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base resize-none"
               placeholder="Mô tả chi tiết: tình trạng sản phẩm, lý do bán, tìm kiếm gì để trao đổi, v.v..."
-              rows="5"
+              rows="4"
               required
             />
           </div>
 
           {/* Địa điểm */}
-          <div className="mb-8">
-            <label className="block text-lg font-bold text-gray-800 mb-3 flex items-center">
+          <div className="mb-6">
+            <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
               📍 Địa điểm <span className="text-red-500 ml-1">*</span>
             </label>
             <input
@@ -217,14 +217,14 @@ const CreatePost = () => {
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-lg"
+              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
               placeholder="vd: Ký túc xá B3, Bách Khoa"
               required
             />
           </div>
 
           {/* Image Upload */}
-          <div className="mb-10 bg-gradient-to-br from-green-50 to-blue-50 rounded-xl p-6 border-2 border-dashed border-green-300">
+          <div className="mb-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-5 border-2 border-dashed border-green-300">
             <ImageUpload
               onImagesChange={(images) => setFormData({ ...formData, images })}
               maxImages={5}
@@ -235,7 +235,7 @@ const CreatePost = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-4 rounded-xl font-bold text-xl hover:shadow-2xl hover:scale-105 transform transition-all duration-300 disabled:opacity-50 disabled:scale-100"
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-lg font-semibold text-base hover:shadow-lg hover:scale-105 transform transition-all duration-300 disabled:opacity-50 disabled:scale-100"
           >
             {loading ? (
               <span className="flex items-center justify-center">

@@ -376,6 +376,29 @@ const PostDetail = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className="mb-6 flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-50 border border-gray-300 rounded-lg shadow-sm transition-all duration-200 hover:shadow-md group"
+      >
+        <svg
+          className="w-5 h-5 text-gray-600 group-hover:text-gray-800 transition-colors"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 19l-7-7 7-7"
+          />
+        </svg>
+        <span className="font-medium text-gray-700 group-hover:text-gray-900">
+          Quay lại
+        </span>
+      </button>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Images */}
         <div className="lg:col-span-2">
@@ -440,11 +463,27 @@ const PostDetail = () => {
 
             <h3 className="font-bold mb-4">Người bán</h3>
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white font-bold">
-                {(post.sellerId?.fullName || post.seller?.fullName || "?")
-                  .charAt(0)
-                  .toUpperCase()}
-              </div>
+              {post.sellerId?.avatar || post.seller?.avatar ? (
+                <img
+                  src={resolveUrl(post.sellerId?.avatar || post.seller?.avatar)}
+                  alt="Avatar"
+                  className="w-12 h-12 rounded-full object-cover bg-gray-200"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://via.placeholder.com/48?text=" +
+                      (post.sellerId?.fullName || post.seller?.fullName || "?")
+                        .charAt(0)
+                        .toUpperCase();
+                  }}
+                />
+              ) : (
+                <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center text-white font-bold">
+                  {(post.sellerId?.fullName || post.seller?.fullName || "?")
+                    .charAt(0)
+                    .toUpperCase()}
+                </div>
+              )}
               <div>
                 <p className="font-bold">
                   {post.sellerId?.fullName ||

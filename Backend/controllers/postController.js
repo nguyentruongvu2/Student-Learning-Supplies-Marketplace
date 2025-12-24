@@ -224,10 +224,18 @@ exports.createPost = async (req, res) => {
     const sellerId = req.user._id;
 
     // Xác thực dữ liệu
-    if (!title || !description || !category || !postType || !condition) {
+    if (
+      !title ||
+      !description ||
+      !category ||
+      !postType ||
+      !condition ||
+      !location
+    ) {
       return res.status(400).json({
         thành_công: false,
-        tin_nhan: "Vui lòng cung cấp tất cả các trường bắt buộc",
+        tin_nhan:
+          "Vui lòng cung cấp tất cả các trường bắt buộc (title, description, category, postType, condition, location)",
       });
     }
 
