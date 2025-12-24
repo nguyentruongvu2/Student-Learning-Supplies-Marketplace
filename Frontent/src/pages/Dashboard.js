@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { postAPI, userAPI } from "../services/apiService";
+import FilterPanel from "../components/FilterPanel";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -167,9 +168,12 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Recent Posts */}
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
               📰 Bài đăng gần đây
             </h2>
+            <div className="mb-6">
+              <FilterPanel />
+            </div>
             {posts.length > 0 ? (
               <div className="space-y-4">
                 {posts.map((post) => (

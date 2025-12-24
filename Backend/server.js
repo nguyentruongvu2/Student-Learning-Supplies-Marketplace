@@ -39,10 +39,17 @@ mongoose
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      // Fail faster when Atlas/DNS is unreachable (shorter than default)
+      serverSelectionTimeoutMS: 5000,
     }
   )
   .then(() => console.log("✓ MongoDB kết nối thành công"))
   .catch((err) => console.error("✗ Lỗi kết nối MongoDB:", err));
+
+// Extra listener for clearer runtime errors
+mongoose.connection.on("error", (err) => {
+  console.error("MongoDB connection error (runtime):", err);
+});
 
 // Kết nối Socket.io cho chat real-time
 io.on("connection", (socket) => {
