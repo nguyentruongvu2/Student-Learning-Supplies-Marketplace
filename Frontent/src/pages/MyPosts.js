@@ -115,16 +115,6 @@ const MyPosts = () => {
           </div>
           <div className="flex gap-3">
             <button
-              onClick={handleRefresh}
-              disabled={refreshing}
-              className={`px-6 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-xl font-bold text-lg hover:shadow-lg hover:scale-105 transform transition-all duration-300 ${
-                refreshing ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              title="Làm mới để xem trạng thái mới nhất"
-            >
-              {refreshing ? "🔄 Đang tải..." : "🔄 Làm mới"}
-            </button>
-            <button
               onClick={() => navigate("/create-post")}
               className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-bold text-lg hover:shadow-lg hover:scale-105 transform transition-all duration-300"
             >
@@ -239,25 +229,27 @@ const MyPosts = () => {
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-center gap-4 mb-8">
-              <button
-                disabled={page === 1}
-                onClick={() => setPage(page - 1)}
-                className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 hover:bg-gray-300"
-              >
-                ← Trước
-              </button>
-              <span className="px-4 py-2">
-                Trang {page} / {totalPages}
-              </span>
-              <button
-                disabled={page === totalPages}
-                onClick={() => setPage(page + 1)}
-                className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg disabled:opacity-50 disabled:scale-100 hover:shadow-lg hover:scale-105 transform transition-all duration-300 font-bold"
-              >
-                Trang sau →
-              </button>
-            </div>
+            {totalPages > 1 && (
+              <div className="flex justify-center gap-4 mb-8">
+                <button
+                  disabled={page === 1}
+                  onClick={() => setPage(page - 1)}
+                  className="px-4 py-2 bg-gray-200 rounded-lg disabled:opacity-50 hover:bg-gray-300"
+                >
+                  ← Trước
+                </button>
+                <span className="px-4 py-2">
+                  Trang {page} / {totalPages}
+                </span>
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => setPage(page + 1)}
+                  className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg disabled:opacity-50 disabled:scale-100 hover:shadow-lg hover:scale-105 transform transition-all duration-300 font-bold"
+                >
+                  Trang sau →
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <div className="bg-white rounded-2xl shadow-2xl p-16 text-center border-2 border-gray-100">

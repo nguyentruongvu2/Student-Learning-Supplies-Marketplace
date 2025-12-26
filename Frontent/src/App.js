@@ -25,6 +25,9 @@ import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import Profile from "./pages/Profile";
 import SavedPosts from "./pages/SavedPosts";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Terms from "./pages/Terms";
 
 // Các thành phần
 import Navbar from "./components/Navbar";
@@ -126,6 +129,9 @@ function App() {
         <Routes>
           {/* Tuyến Công khai */}
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
           <Route
             path="/login"
             element={

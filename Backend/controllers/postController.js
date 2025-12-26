@@ -265,6 +265,9 @@ exports.createPost = async (req, res) => {
     // Tăng số bài đăng của người dùng
     await User.findByIdAndUpdate(sellerId, { $inc: { postsCount: 1 } });
 
+    // Không tăng postCount ở PostType vì bài đang chờ duyệt
+    // postCount chỉ tăng khi bài được duyệt (approvePost)
+
     res.status(201).json({
       thành_công: true,
       tin_nhan: "Bài đăng đã được tạo thành công. Chờ quản trị viên duyệt",
@@ -367,6 +370,22 @@ exports.deletePost = async (req, res) => {
 
     // Giảm số bài đăng của người dùng
     await User.findByIdAndUpdate(post.sellerId, { $inc: { postsCount: -1 } });
+
+    // Giảm postCount của PostType nếu bài đã được duyệt
+    if (post.status === "chap_nhan") {
+      const PostType = require("../models/PostType");
+      await PostType.findOneAndUpdate(
+        { code: post.postType },
+        { $inc: { postCount: -1 } }
+      );
+
+      // Giảm postCount của Category nếu bài đã được duyệt
+      const Category = require("../models/Category");
+      await Category.findOneAndUpdate(
+        { name: post.category },
+        { $inc: { postCount: -1 } }
+      );
+    }
 
     res.status(200).json({
       thành_công: true,
@@ -580,6 +599,20 @@ exports.approvePost = async (req, res) => {
       });
     }
 
+    // Tăng postCount của PostType khi duyệt bài
+    const PostType = require("../models/PostType");
+    await PostType.findOneAndUpdate(
+      { code: post.postType },
+      { $inc: { postCount: 1 } }
+    );
+
+    // Tăng postCount của Category khi duyệt bài
+    const Category = require("../models/Category");
+    await Category.findOneAndUpdate(
+      { name: post.category },
+      { $inc: { postCount: 1 } }
+    );
+
     console.log(`✅ Post approved:`, {
       id: post._id,
       title: post.title,
@@ -620,6 +653,8 @@ exports.rejectPost = async (req, res) => {
         tin_nhan: "Bài đăng không tồn tại",
       });
     }
+
+    // Không cần giảm postCount vì bài chưa được duyệt nên chưa tăng postCount
 
     res.status(200).json({
       thành_công: true,

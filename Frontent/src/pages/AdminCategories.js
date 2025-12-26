@@ -9,10 +9,8 @@ const AdminCategories = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
-    slug: "",
     description: "",
     icon: "",
-    color: "#3b82f6",
     order: 0,
     isActive: true,
     parentId: null,
@@ -64,10 +62,8 @@ const AdminCategories = () => {
     setEditingCategory(category);
     setFormData({
       name: category.name,
-      slug: category.slug,
       description: category.description || "",
       icon: category.icon || "",
-      color: category.color,
       order: category.order,
       isActive: category.isActive,
       parentId: category.parentId || null,
@@ -93,10 +89,8 @@ const AdminCategories = () => {
     setEditingCategory(null);
     setFormData({
       name: "",
-      slug: "",
       description: "",
       icon: "",
-      color: "#3b82f6",
       order: 0,
       isActive: true,
       parentId: null,
@@ -129,13 +123,7 @@ const AdminCategories = () => {
                 Tên
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Slug
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Icon
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Màu
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Thứ tự
@@ -155,19 +143,10 @@ const AdminCategories = () => {
             {categories.map((category) => (
               <tr key={category._id}>
                 <td className="px-6 py-4 whitespace-nowrap">{category.name}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {category.slug}
-                </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {category.icon && (
                     <span className="text-2xl">{category.icon}</span>
                   )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div
-                    className="w-8 h-8 rounded"
-                    style={{ backgroundColor: category.color }}
-                  />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {category.order}
@@ -229,17 +208,6 @@ const AdminCategories = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Slug</label>
-                  <input
-                    type="text"
-                    name="slug"
-                    value={formData.slug}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
-                    required
-                  />
-                </div>
-                <div>
                   <label className="block text-sm font-medium mb-1">
                     Mô tả
                   </label>
@@ -262,18 +230,6 @@ const AdminCategories = () => {
                     onChange={handleInputChange}
                     className="w-full border rounded px-3 py-2"
                     placeholder="📚"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Màu sắc
-                  </label>
-                  <input
-                    type="color"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
                   />
                 </div>
                 <div>

@@ -52,24 +52,21 @@ exports.getCategoryById = async (req, res) => {
 // Tạo danh mục mới
 exports.createCategory = async (req, res) => {
   try {
-    const { name, slug, description, icon, color, order, isActive, parentId } =
-      req.body;
+    const { name, description, icon, order, isActive, parentId } = req.body;
 
-    // Kiểm tra slug đã tồn tại chưa
-    const existingCategory = await Category.findOne({ slug });
+    // Kiểm tra tên đã tồn tại chưa
+    const existingCategory = await Category.findOne({ name });
     if (existingCategory) {
       return res.status(400).json({
         thành_công: false,
-        tin_nhắn: "Slug đã tồn tại",
+        tin_nhắn: "Tên danh mục đã tồn tại",
       });
     }
 
     const category = new Category({
       name,
-      slug,
       description,
       icon,
-      color: color || "#3b82f6",
       order: order || 0,
       isActive: isActive !== undefined ? isActive : true,
       parentId: parentId || null,
@@ -96,8 +93,7 @@ exports.createCategory = async (req, res) => {
 exports.updateCategory = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, slug, description, icon, color, order, isActive, parentId } =
-      req.body;
+    const { name, description, icon, order, isActive, parentId } = req.body;
 
     const category = await Category.findById(id);
     if (!category) {
@@ -107,23 +103,21 @@ exports.updateCategory = async (req, res) => {
       });
     }
 
-    // Kiểm tra slug mới có trùng không
-    if (slug && slug !== category.slug) {
-      const existingCategory = await Category.findOne({ slug });
+    // Kiểm tra tên mới có trùng không
+    if (name && name !== category.name) {
+      const existingCategory = await Category.findOne({ name });
       if (existingCategory) {
         return res.status(400).json({
           thành_công: false,
-          tin_nhắn: "Slug đã tồn tại",
+          tin_nhắn: "Tên danh mục đã tồn tại",
         });
       }
     }
 
     // Cập nhật
     if (name) category.name = name;
-    if (slug) category.slug = slug;
     if (description !== undefined) category.description = description;
     if (icon !== undefined) category.icon = icon;
-    if (color) category.color = color;
     if (order !== undefined) category.order = order;
     if (isActive !== undefined) category.isActive = isActive;
     if (parentId !== undefined) category.parentId = parentId;
@@ -164,6 +158,17 @@ exports.deleteCategory = async (req, res) => {
       return res.status(400).json({
         thành_công: false,
         tin_nhắn: "Không thể xóa danh mục có danh mục con",
+      });
+    }
+
+    // Kiểm tra xem có bài đăng nào đang sử dụng danh mục này không
+    const Post = require("../models/Post");
+    const postCount = await Post.countDocuments({ category: category.name });
+
+    if (postCount > 0) {
+      return res.status(400).json({
+        thành_công: false,
+        tin_nhắn: `Không thể xóa danh mục này vì có ${postCount} bài đăng đang sử dụng`,
       });
     }
 

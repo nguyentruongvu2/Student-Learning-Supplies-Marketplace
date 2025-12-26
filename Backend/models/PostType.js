@@ -31,12 +31,6 @@ const postTypeSchema = new mongoose.Schema(
       default: null,
     },
 
-    // Màu sắc
-    color: {
-      type: String,
-      default: "#10b981",
-    },
-
     // Trạng thái
     isActive: {
       type: Boolean,

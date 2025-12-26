@@ -52,8 +52,7 @@ exports.getPostTypeById = async (req, res) => {
 // Tạo loại bài đăng mới
 exports.createPostType = async (req, res) => {
   try {
-    const { name, code, description, icon, color, order, isActive, config } =
-      req.body;
+    const { name, code, description, icon, order, isActive, config } = req.body;
 
     // Kiểm tra code đã tồn tại chưa
     const existingPostType = await PostType.findOne({ code });
@@ -69,7 +68,6 @@ exports.createPostType = async (req, res) => {
       code,
       description,
       icon,
-      color: color || "#10b981",
       order: order || 0,
       isActive: isActive !== undefined ? isActive : true,
       config: config || {
@@ -100,8 +98,7 @@ exports.createPostType = async (req, res) => {
 exports.updatePostType = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, code, description, icon, color, order, isActive, config } =
-      req.body;
+    const { name, code, description, icon, order, isActive, config } = req.body;
 
     const postType = await PostType.findById(id);
     if (!postType) {
@@ -127,7 +124,6 @@ exports.updatePostType = async (req, res) => {
     if (code) postType.code = code;
     if (description !== undefined) postType.description = description;
     if (icon !== undefined) postType.icon = icon;
-    if (color) postType.color = color;
     if (order !== undefined) postType.order = order;
     if (isActive !== undefined) postType.isActive = isActive;
     if (config) postType.config = { ...postType.config, ...config };
@@ -159,6 +155,17 @@ exports.deletePostType = async (req, res) => {
       return res.status(404).json({
         thành_công: false,
         tin_nhắn: "Không tìm thấy loại bài đăng",
+      });
+    }
+
+    // Kiểm tra xem có bài đăng nào đang sử dụng loại này không
+    const Post = require("../models/Post");
+    const postCount = await Post.countDocuments({ postType: postType.code });
+
+    if (postCount > 0) {
+      return res.status(400).json({
+        thành_công: false,
+        tin_nhắn: `Không thể xóa loại bài đăng này vì có ${postCount} bài đăng đang sử dụng`,
       });
     }
 

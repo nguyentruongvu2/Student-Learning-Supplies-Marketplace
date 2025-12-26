@@ -12,7 +12,6 @@ const AdminPostTypes = () => {
     code: "",
     description: "",
     icon: "",
-    color: "#10b981",
     order: 0,
     isActive: true,
     config: {
@@ -82,7 +81,6 @@ const AdminPostTypes = () => {
       code: type.code,
       description: type.description || "",
       icon: type.icon || "",
-      color: type.color,
       order: type.order,
       isActive: type.isActive,
       config: type.config,
@@ -111,7 +109,6 @@ const AdminPostTypes = () => {
       code: "",
       description: "",
       icon: "",
-      color: "#10b981",
       order: 0,
       isActive: true,
       config: {
@@ -154,9 +151,6 @@ const AdminPostTypes = () => {
                 Icon
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                Màu
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                 Số bài đăng
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
@@ -176,12 +170,6 @@ const AdminPostTypes = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {type.icon && <span className="text-2xl">{type.icon}</span>}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div
-                    className="w-8 h-8 rounded"
-                    style={{ backgroundColor: type.color }}
-                  />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   {type.postCount}
@@ -275,18 +263,6 @@ const AdminPostTypes = () => {
                     onChange={handleInputChange}
                     className="w-full border rounded px-3 py-2"
                     placeholder="💰"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">
-                    Màu sắc
-                  </label>
-                  <input
-                    type="color"
-                    name="color"
-                    value={formData.color}
-                    onChange={handleInputChange}
-                    className="w-full border rounded px-3 py-2"
                   />
                 </div>
                 <div>

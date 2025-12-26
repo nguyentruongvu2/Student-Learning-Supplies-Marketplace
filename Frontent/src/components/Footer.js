@@ -1,5 +1,12 @@
 import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaGithub } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import {
+  FaFacebook,
+  FaGithub,
+  FaEnvelope,
+  FaPhone,
+  FaMapMarkerAlt,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -22,59 +29,71 @@ const Footer = () => {
             <h3 className="text-2xl font-bold mb-4">🔗 Liên kết</h3>
             <ul className="text-gray-300 text-sm space-y-3">
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/"
                   className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
                 >
                   <span>→</span> Trang chủ
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/about"
                   className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
                 >
                   <span>→</span> Giới thiệu
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="#"
+                <Link
+                  to="/contact"
                   className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
                 >
                   <span>→</span> Liên hệ
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
+                >
+                  <span>→</span> Điều khoản sử dụng
+                </Link>
               </li>
             </ul>
           </div>
 
-          {/* Hỗ trợ */}
+          {/* Thông tin liên hệ */}
           <div>
-            <h3 className="text-2xl font-bold mb-4">❓ Hỗ trợ</h3>
+            <h3 className="text-2xl font-bold mb-4">📞 Liên hệ</h3>
             <ul className="text-gray-300 text-sm space-y-3">
               <li>
                 <a
-                  href="#"
+                  href="mailto:nguyentruongvu2023@gmail.com"
                   className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
                 >
-                  <span>→</span> FAQ
+                  <FaEnvelope className="text-blue-400" />
+                  <span className="break-all">
+                    {" "}
+                    Email:nguyentruongvu2023@gmail.com
+                  </span>
                 </a>
               </li>
               <li>
                 <a
-                  href="#"
+                  href="tel:0866461648"
                   className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
                 >
-                  <span>→</span> Điều khoản dịch vụ
+                  <FaPhone className="text-green-400" />
+                  0866461648
                 </a>
               </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-blue-400 transition-colors duration-300 flex items-center gap-2"
-                >
-                  <span>→</span> Chính sách bảo mật
-                </a>
+              <li className="flex items-start gap-2">
+                <FaMapMarkerAlt className="text-red-400 mt-1 flex-shrink-0" />
+                <span className="leading-relaxed">
+                  Địa chỉ: Số 126, đường Nguyễn Thiện Thành, phường Hòa Thuận,
+                  tỉnh Vĩnh Long
+                </span>
               </li>
             </ul>
           </div>
@@ -84,26 +103,20 @@ const Footer = () => {
             <h3 className="text-2xl font-bold mb-4">📱 Theo dõi chúng tôi</h3>
             <div className="flex gap-4">
               <a
-                href="#"
+                href="https://www.facebook.com/TraVinhUniversity.TVU/?locale=vi_VN"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-12 h-12 rounded-lg bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 transform"
+                title="Facebook"
               >
                 <FaFacebook />
               </a>
               <a
-                href="#"
-                className="w-12 h-12 rounded-lg bg-blue-400 hover:bg-blue-500 flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 transform"
-              >
-                <FaTwitter />
-              </a>
-              <a
-                href="#"
-                className="w-12 h-12 rounded-lg bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 transform"
-              >
-                <FaInstagram />
-              </a>
-              <a
-                href="#"
+                href="https://github.com/nguyentruongvu2/CN-DA22TTA-NGUYENTRUONGVU-StudentMarketplace"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-12 h-12 rounded-lg bg-gray-700 hover:bg-gray-600 flex items-center justify-center text-xl transition-all duration-300 hover:scale-110 transform"
+                title="GitHub"
               >
                 <FaGithub />
               </a>
@@ -129,8 +142,8 @@ const Footer = () => {
 
           <div className="text-center text-gray-400 text-sm">
             <p>
-              &copy; 2024 🎓 Nhà cho Sinh viên. Nền tảng giao dịch đáng tin cậy
-              cho sinh viên.
+              &copy; {new Date().getFullYear()} 🎓 Chợ đồ cũ sinh viên. Nền tảng
+              giao dịch đáng tin cậy dành cho sinh viên.
             </p>
             <p className="mt-2 text-xs">Made with ❤️ for students</p>
           </div>

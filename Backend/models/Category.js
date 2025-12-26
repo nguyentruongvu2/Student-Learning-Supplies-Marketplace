@@ -11,14 +11,6 @@ const categorySchema = new mongoose.Schema(
       maxlength: 50,
     },
 
-    // Slug (cho URL thân thiện)
-    slug: {
-      type: String,
-      required: true,
-      unique: true,
-      lowercase: true,
-    },
-
     // Mô tả
     description: {
       type: String,
@@ -29,12 +21,6 @@ const categorySchema = new mongoose.Schema(
     icon: {
       type: String,
       default: null,
-    },
-
-    // Màu sắc (hex code)
-    color: {
-      type: String,
-      default: "#3b82f6",
     },
 
     // Thứ tự hiển thị
@@ -83,7 +69,6 @@ const categorySchema = new mongoose.Schema(
 );
 
 // Index
-categorySchema.index({ slug: 1 });
 categorySchema.index({ isActive: 1, order: 1 });
 categorySchema.index({ parentId: 1 });
 

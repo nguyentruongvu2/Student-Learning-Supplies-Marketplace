@@ -227,7 +227,7 @@ const Home = () => {
             <>
               <div className="mb-8 flex items-center justify-between">
                 <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                  📋 Danh sách sản phẩm
+                  📋 Danh sách bài đăng
                 </h2>
                 <span className="text-sm font-semibold text-gray-500 bg-gray-100 px-4 py-2 rounded-full">
                   {posts.length} kết quả

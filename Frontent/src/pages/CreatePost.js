@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { postAPI } from "../services/apiService";
 import ImageUpload from "../components/ImageUpload";
+import api from "../services/api";
 
 const CreatePost = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -17,6 +19,22 @@ const CreatePost = () => {
     location: "",
     images: [],
   });
+
+  // Load categories từ API
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/categories/active");
+      setCategories(response.data.categories || []);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+      // Nếu lỗi, dùng categories mặc định
+      setCategories([]);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -122,14 +140,29 @@ const CreatePost = () => {
                 required
               >
                 <option value="">Chọn danh mục</option>
-                <option value="Sách">📖 Sách</option>
-                <option value="Bút & Giấy">✏️ Bút & Giấy</option>
-                <option value="Máy tính & Điện tử">
-                  💻 Máy tính & Điện tử
-                </option>
-                <option value="Quần áo">👕 Quần áo</option>
-                <option value="Khác">📦 Khác</option>
+                {categories.length > 0 ? (
+                  categories.map((cat) => (
+                    <option key={cat._id} value={cat.name}>
+                      {cat.icon && `${cat.icon} `}
+                      {cat.name}
+                    </option>
+                  ))
+                ) : (
+                  <>
+                    <option value="Sách">📖 Sách</option>
+                    <option value="Điện tử">💻 Điện tử</option>
+                    <option value="Văn phòng phẩm">✏️ Văn phòng phẩm</option>
+                    <option value="Quần áo">👕 Quần áo</option>
+                    <option value="Thể thao">⚽ Thể thao</option>
+                    <option value="Nội thất">🪑 Nội thất</option>
+                    <option value="Khác">📦 Khác</option>
+                  </>
+                )}
               </select>
+              <p className="text-xs text-gray-500 mt-1">
+                💡 Nếu không tìm thấy danh mục phù hợp, chọn "Khác" và mô tả chi
+                tiết trong phần mô tả bài đăng
+              </p>
             </div>
 
             <div>
