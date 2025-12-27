@@ -109,14 +109,6 @@ const AdminSidebar = ({ isOpen, onClose }) => {
               <span>Đăng xuất</span>
             </button>
           </div>
-
-          {/* Info Box */}
-          <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-            <p className="text-white text-sm">
-              💡 <strong>Mẹo:</strong> Sử dụng menu bên trái để điều hướng nhanh
-              giữa các chức năng quản trị.
-            </p>
-          </div>
         </div>
       </aside>
     </>

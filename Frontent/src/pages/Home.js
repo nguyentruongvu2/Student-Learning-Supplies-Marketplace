@@ -18,7 +18,6 @@ const Home = () => {
   const [dateFilter, setDateFilter] = useState("");
   const [conditions, setConditions] = useState([]);
   const [sortBy, setSortBy] = useState("newest");
-  const [negotiableOnly, setNegotiableOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
@@ -102,21 +101,11 @@ const Home = () => {
         priceRange !== "all" ||
         dateFilter ||
         conditions.length > 0 ||
-        sortBy !== "newest" ||
-        negotiableOnly
+        sortBy !== "newest"
       )
     );
     fetchPosts(1);
-  }, [
-    category,
-    postType,
-    search,
-    priceRange,
-    dateFilter,
-    conditions,
-    sortBy,
-    negotiableOnly,
-  ]);
+  }, [category, postType, search, priceRange, dateFilter, conditions, sortBy]);
 
   const fetchPosts = async (pageNum = 1) => {
     try {
@@ -149,8 +138,7 @@ const Home = () => {
         selectedPriceRange.min,
         selectedPriceRange.max,
         dateFilter || null,
-        conditions.length > 0 ? conditions.join(",") : null,
-        negotiableOnly
+        conditions.length > 0 ? conditions.join(",") : null
       );
 
       if (response.thành_công) {
@@ -186,8 +174,6 @@ const Home = () => {
         setConditions={setConditions}
         sortBy={sortBy}
         setSortBy={setSortBy}
-        negotiableOnly={negotiableOnly}
-        setNegotiableOnly={setNegotiableOnly}
         onClearFilters={() => {
           setCategory("");
           setPostType("");
@@ -195,7 +181,6 @@ const Home = () => {
           setDateFilter("");
           setConditions([]);
           setSortBy("newest");
-          setNegotiableOnly(false);
         }}
       />
 
@@ -318,7 +303,6 @@ const Home = () => {
                         setDateFilter("");
                         setConditions([]);
                         setSortBy("newest");
-                        setNegotiableOnly(false);
                       }}
                       className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold px-8 py-3 rounded-xl hover:shadow-xl transition-all duration-300 hover:scale-105"
                     >

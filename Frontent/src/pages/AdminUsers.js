@@ -26,16 +26,43 @@ const AdminUsers = () => {
 
   const handleToggleLock = async (userId, currentStatus) => {
     try {
-      if (currentStatus) {
-        await userAPI.unlockUser(userId);
-        toast.success("Đã mở khóa tài khoản");
+      const newStatus = !currentStatus; // Đảo ngược trạng thái
+      const lockReason = !newStatus ? "Khóa bởi admin" : null;
+
+      await userAPI.lockUnlockUser(userId, newStatus, lockReason);
+
+      if (newStatus) {
+        toast.success("Đã mở khóa tài khoản thành công!");
       } else {
-        await userAPI.lockUser(userId);
-        toast.success("Đã khóa tài khoản");
+        toast.success("Đã khóa tài khoản thành công!");
       }
+
       fetchUsers();
     } catch (error) {
-      toast.error("Lỗi khi thay đổi trạng thái tài khoản");
+      console.error("Error toggling lock:", error);
+      toast.error(
+        error.response?.data?.tin_nhan ||
+          "Lỗi khi thay đổi trạng thái tài khoản"
+      );
+    }
+  };
+
+  const handleDeleteUser = async (userId, userName) => {
+    if (
+      !window.confirm(
+        `Bạn có chắc chắn muốn xóa tài khoản "${userName}"?\n\nHành động này không thể hoàn tác!`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      await userAPI.deleteUser(userId);
+      toast.success("Đã xóa tài khoản thành công!");
+      fetchUsers();
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      toast.error(error.response?.data?.tin_nhan || "Lỗi khi xóa tài khoản");
     }
   };
 
@@ -115,18 +142,28 @@ const AdminUsers = () => {
                   </td>
                   <td className="px-6 py-4 text-center">
                     {user.role !== "admin" && (
-                      <button
-                        onClick={() =>
-                          handleToggleLock(user._id, user.isActive)
-                        }
-                        className={`px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 ${
-                          user.isActive
-                            ? "bg-gradient-to-r from-red-500 to-pink-600 text-white hover:shadow-lg"
-                            : "bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:shadow-lg"
-                        }`}
-                      >
-                        {user.isActive ? "🔒 Khóa" : "🔓 Mở khóa"}
-                      </button>
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() =>
+                            handleToggleLock(user._id, user.isActive)
+                          }
+                          className={`px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 ${
+                            user.isActive
+                              ? "bg-gradient-to-r from-orange-500 to-red-600 text-white hover:shadow-lg"
+                              : "bg-gradient-to-r from-green-500 to-emerald-600 text-white hover:shadow-lg"
+                          }`}
+                        >
+                          {user.isActive ? "🔒 Khóa" : "🔓 Mở khóa"}
+                        </button>
+                        <button
+                          onClick={() =>
+                            handleDeleteUser(user._id, user.fullName)
+                          }
+                          className="px-4 py-2 rounded-lg font-bold transition-all duration-300 hover:scale-105 bg-gradient-to-r from-red-600 to-rose-700 text-white hover:shadow-lg"
+                        >
+                          🗑️ Xóa
+                        </button>
+                      </div>
                     )}
                   </td>
                 </tr>

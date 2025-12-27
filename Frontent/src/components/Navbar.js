@@ -11,6 +11,7 @@ import {
   FaSearch,
   FaTimes,
 } from "react-icons/fa";
+import { FiLogIn, FiUserPlus } from "react-icons/fi";
 
 /**
  * Component Navbar - Thanh điều hướng chính của ứng dụng
@@ -225,94 +226,134 @@ const Navbar = ({
               <>
                 <Link
                   to="/create-post"
-                  className="flex items-center space-x-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-rose-600 text-white px-5 py-2 rounded-lg hover:from-red-600 hover:to-rose-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 font-medium"
                 >
-                  <FaPlus /> <span>Đăng bài</span>
+                  <FaPlus className="text-lg" /> <span>Đăng bài</span>
                 </Link>
                 <Link to="/chat" className="text-gray-600 hover:text-blue-600">
                   <FaComments size={20} />
                 </Link>
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-lg">
-                    <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                      {user?.fullName?.charAt(0).toUpperCase()}
-                    </div>
-                    <span className="text-sm font-semibold text-gray-700">
-                      {user?.fullName}
-                    </span>
-                  </div>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center space-x-2 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-                  >
-                    <FaSignOutAlt />
-                    <span className="hidden sm:inline">Đăng xuất</span>
-                  </button>
-                </div>
                 <div className="relative">
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="flex items-center space-x-2 text-gray-600 hover:text-blue-600"
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors border border-gray-200 hover:border-gray-300"
                   >
-                    <FaCog size={20} />
+                    {user?.avatar ? (
+                      <img
+                        src={user.avatar}
+                        alt={user?.fullName}
+                        className="w-8 h-8 rounded-full object-cover shadow-md"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md">
+                        {user?.fullName?.charAt(0).toUpperCase()}
+                      </div>
+                    )}
+                    <span className="hidden md:inline text-sm font-semibold">
+                      {user?.fullName}
+                    </span>
+                    <FaChevronDown className="text-xs" />
                   </button>
                   {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl z-50">
-                      <Link
-                        to="/dashboard"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100 border-b"
-                      >
-                        📊 Bảng điều khiển
-                      </Link>
-                      <Link
-                        to="/profile"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        👤 Hồ sơ
-                      </Link>
-                      <Link
-                        to="/my-posts"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        📝 Bài đăng của tôi
-                      </Link>
-                      <Link
-                        to="/saved-posts"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        ⭐ Bài đăng đã lưu
-                      </Link>
-                      {user?.role === "admin" && (
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
+                      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 px-4 py-3 text-white">
+                        <p className="text-sm font-semibold">
+                          {user?.fullName}
+                        </p>
+                        <p className="text-xs opacity-90">{user?.email}</p>
+                      </div>
+                      <div className="py-2">
                         <Link
-                          to="/admin"
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100 border-t"
+                          to="/dashboard"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 transition-colors"
                         >
-                          ⚙️ Quản trị
+                          <span className="text-lg">📊</span>
+                          <span className="text-sm font-medium">
+                            Bảng điều khiển
+                          </span>
                         </Link>
-                      )}
-                      <button
-                        onClick={handleLogout}
-                        className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 flex items-center space-x-2 border-t"
-                      >
-                        <FaSignOutAlt /> <span>Đăng xuất</span>
-                      </button>
+                        <Link
+                          to="/profile"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 transition-colors"
+                        >
+                          <FaUser className="text-gray-500" />
+                          <span className="text-sm font-medium">Hồ sơ</span>
+                        </Link>
+                        <Link
+                          to="/my-posts"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 transition-colors"
+                        >
+                          <span className="text-lg">📝</span>
+                          <span className="text-sm font-medium">
+                            Bài đăng của tôi
+                          </span>
+                        </Link>
+                        <Link
+                          to="/saved-posts"
+                          onClick={() => setDropdownOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-gray-700 hover:bg-blue-50 transition-colors"
+                        >
+                          <span className="text-lg">⭐</span>
+                          <span className="text-sm font-medium">
+                            Bài đăng đã lưu
+                          </span>
+                        </Link>
+                        {user?.role === "admin" && (
+                          <Link
+                            to="/admin"
+                            onClick={() => setDropdownOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-indigo-600 hover:bg-indigo-50 transition-colors border-t border-gray-100"
+                          >
+                            <FaCog className="text-indigo-600" />
+                            <span className="text-sm font-semibold">
+                              Quản trị
+                            </span>
+                          </Link>
+                        )}
+                      </div>
+                      <div className="border-t border-gray-200">
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setDropdownOpen(false);
+                          }}
+                          className="w-full flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                          <FaSignOutAlt />
+                          <span className="text-sm font-semibold">
+                            Đăng xuất
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-rose-600 text-white px-4 py-2 rounded-lg hover:from-red-600 hover:to-rose-700 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                >
+                  <FaSignOutAlt />
+                  <span className="hidden sm:inline">Đăng xuất</span>
+                </button>
               </>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="text-gray-600 hover:text-blue-600 font-medium transition"
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 font-medium"
                 >
-                  Đăng nhập
+                  <FiLogIn className="text-lg" />
+                  <span>Đăng nhập</span>
                 </Link>
                 <Link
                   to="/register"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                  className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 font-medium"
                 >
-                  Đăng ký
+                  <FiUserPlus className="text-lg" />
+                  <span>Đăng ký</span>
                 </Link>
               </>
             )}

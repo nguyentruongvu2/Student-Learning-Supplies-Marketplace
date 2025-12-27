@@ -249,3 +249,42 @@ exports.markWarningAsRead = async (req, res) => {
     });
   }
 };
+
+// @desc    Xóa người dùng
+// @route   DELETE /api/users/:id
+// @access  Riêng tư/Quản trị
+exports.deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Không cho phép xóa tài khoản admin
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({
+        thành_công: false,
+        tin_nhan: "Người dùng không tồn tại",
+      });
+    }
+
+    if (user.role === "admin") {
+      return res.status(403).json({
+        thành_công: false,
+        tin_nhan: "Không thể xóa tài khoản admin",
+      });
+    }
+
+    // Xóa user
+    await User.findByIdAndDelete(id);
+
+    res.status(200).json({
+      thành_công: true,
+      tin_nhan: "Đã xóa tài khoản thành công",
+    });
+  } catch (error) {
+    console.error("Lỗi xóa người dùng:", error);
+    res.status(500).json({
+      thành_công: false,
+      tin_nhan: error.message || "Lỗi máy chủ nội bộ",
+    });
+  }
+};

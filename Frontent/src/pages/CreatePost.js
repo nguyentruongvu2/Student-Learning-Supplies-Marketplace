@@ -94,25 +94,25 @@ const CreatePost = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8">
-      <div className="max-w-3xl mx-auto px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-6">
+      <div className="max-w-2xl mx-auto px-4">
         {/* Header */}
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-1">
             ✨ Tạo bài đăng mới
           </h1>
-          <p className="text-base text-gray-600">
+          <p className="text-sm text-gray-600">
             Chia sẻ dụng cụ của bạn với cộng đồng sinh viên
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-lg p-6 border border-gray-200"
+          className="bg-white rounded-lg shadow-md p-5 border border-gray-200"
         >
           {/* Tiêu đề */}
-          <div className="mb-6">
-            <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
               📝 Tiêu đề <span className="text-red-500 ml-1">*</span>
             </label>
             <input
@@ -120,23 +120,23 @@ const CreatePost = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
-              placeholder="vd: Sách Toán Rời Rạc - Như mới"
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm"
+              placeholder="Nhập tiêu đề bài đăng"
               required
             />
           </div>
 
           {/* Category & Post Type */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <div>
-              <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+              <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
                 📂 Danh mục <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
+                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm"
                 required
               >
                 <option value="">Chọn danh mục</option>
@@ -166,14 +166,14 @@ const CreatePost = () => {
             </div>
 
             <div>
-              <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+              <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
                 🏷️ Loại bài <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="postType"
                 value={formData.postType}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
+                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm"
               >
                 <option value="ban">💰 Bán</option>
                 <option value="trao_doi">🔄 Trao đổi</option>
@@ -182,16 +182,16 @@ const CreatePost = () => {
           </div>
 
           {/* Condition & Price */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
             <div>
-              <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+              <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
                 ✨ Tình trạng <span className="text-red-500 ml-1">*</span>
               </label>
               <select
                 name="condition"
                 value={formData.condition}
                 onChange={handleChange}
-                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
+                className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm"
                 required
               >
                 <option value="">Chọn tình trạng</option>
@@ -204,11 +204,11 @@ const CreatePost = () => {
 
             {formData.postType === "ban" && (
               <div>
-                <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+                <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
                   💵 Giá (VNĐ) <span className="text-red-500 ml-1">*</span>
                 </label>
                 <div className="relative">
-                  <span className="absolute left-4 top-3 text-xl text-green-600">
+                  <span className="absolute left-3 top-2.5 text-base text-green-600">
                     ₫
                   </span>
                   <input
@@ -216,8 +216,8 @@ const CreatePost = () => {
                     name="price"
                     value={formData.price}
                     onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
-                    placeholder="50000"
+                    className="w-full pl-8 pr-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm"
+                    placeholder="50,000"
                   />
                 </div>
               </div>
@@ -225,24 +225,24 @@ const CreatePost = () => {
           </div>
 
           {/* Mô tả */}
-          <div className="mb-6">
-            <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
               📖 Mô tả <span className="text-red-500 ml-1">*</span>
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base resize-none"
-              placeholder="Mô tả chi tiết: tình trạng sản phẩm, lý do bán, tìm kiếm gì để trao đổi, v.v..."
-              rows="4"
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm resize-none"
+              placeholder="Mô tả chi tiết: tình trạng sản phẩm, lý do bán..."
+              rows="3"
               required
             />
           </div>
 
           {/* Địa điểm */}
-          <div className="mb-6">
-            <label className="block text-base font-semibold text-gray-800 mb-2 flex items-center">
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-gray-800 mb-1.5 flex items-center">
               📍 Địa điểm <span className="text-red-500 ml-1">*</span>
             </label>
             <input
@@ -250,14 +250,14 @@ const CreatePost = () => {
               name="location"
               value={formData.location}
               onChange={handleChange}
-              className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-base"
+              className="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-green-500 focus:ring-2 focus:ring-green-100 transition text-sm"
               placeholder="vd: Ký túc xá B3, Bách Khoa"
               required
             />
           </div>
 
           {/* Image Upload */}
-          <div className="mb-8 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-5 border-2 border-dashed border-green-300">
+          <div className="mb-5 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg p-4 border-2 border-dashed border-green-300">
             <ImageUpload
               onImagesChange={(images) => setFormData({ ...formData, images })}
               maxImages={5}
@@ -268,7 +268,7 @@ const CreatePost = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-lg font-semibold text-base hover:shadow-lg hover:scale-105 transform transition-all duration-300 disabled:opacity-50 disabled:scale-100"
+            className="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-2.5 rounded-lg font-semibold text-sm hover:shadow-lg hover:scale-[1.02] transform transition-all duration-300 disabled:opacity-50 disabled:scale-100"
           >
             {loading ? (
               <span className="flex items-center justify-center">

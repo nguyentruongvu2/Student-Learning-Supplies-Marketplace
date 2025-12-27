@@ -8,6 +8,7 @@ const {
   lockUnlockUser,
   getUserWarnings,
   markWarningAsRead,
+  deleteUser,
 } = require("../controllers/userController");
 
 // @route   GET /api/users/:id
@@ -43,5 +44,10 @@ router.put(
   authenticate,
   markWarningAsRead
 );
+
+// @route   DELETE /api/users/:id
+// @desc    Xóa người dùng (chỉ admin)
+// @access  Riêng tư/Quản trị
+router.delete("/:id", authenticate, isAdmin, deleteUser);
 
 module.exports = router;

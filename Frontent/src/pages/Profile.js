@@ -272,7 +272,7 @@ const Profile = ({ user }) => {
                   <MdArticle className="text-2xl text-blue-600" />
                 </div>
                 <p className="text-2xl font-bold text-blue-600">
-                  {profile.postsCount || 0}
+                  {Math.max(0, profile.postsCount || 0)}
                 </p>
                 <p className="text-xs text-gray-600">Bài đăng</p>
               </div>
@@ -281,7 +281,7 @@ const Profile = ({ user }) => {
                   <MdStar className="text-2xl text-yellow-600" />
                 </div>
                 <p className="text-2xl font-bold text-yellow-600">
-                  {profile.rating || 0}
+                  {Math.max(0, profile.rating || 0)}
                 </p>
                 <p className="text-xs text-gray-600">Đánh giá</p>
               </div>
@@ -290,7 +290,7 @@ const Profile = ({ user }) => {
                   <MdVisibility className="text-2xl text-green-600" />
                 </div>
                 <p className="text-2xl font-bold text-green-600">
-                  {profile.viewsCount || 0}
+                  {Math.max(0, profile.viewsCount || 0)}
                 </p>
                 <p className="text-xs text-gray-600">Lượt xem</p>
               </div>

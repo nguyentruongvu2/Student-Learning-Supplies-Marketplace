@@ -16,8 +16,6 @@ const FilterSidebar = ({
   setConditions,
   sortBy,
   setSortBy,
-  negotiableOnly,
-  setNegotiableOnly,
   onClearFilters,
 }) => {
   const [categoryExpanded, setCategoryExpanded] = useState(true);
@@ -101,8 +99,7 @@ const FilterSidebar = ({
       priceRange !== "all" ||
       dateFilter ||
       conditions.length > 0 ||
-      sortBy !== "newest" ||
-      negotiableOnly
+      sortBy !== "newest"
     );
   };
 
@@ -426,22 +423,6 @@ const FilterSidebar = ({
             )}
           </div>
 
-          {/* Negotiable Only Filter */}
-          <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
-            <label className="flex items-center gap-3 px-4 py-3 cursor-pointer hover:bg-gray-50 transition">
-              <input
-                type="checkbox"
-                checked={negotiableOnly}
-                onChange={(e) => setNegotiableOnly(e.target.checked)}
-                className="w-5 h-5 text-rose-600 focus:ring-rose-500 rounded"
-              />
-              <span className="text-lg">🤝</span>
-              <span className="flex-1 font-bold text-gray-800">
-                Chỉ giá có thể thương lượng
-              </span>
-            </label>
-          </div>
-
           {/* Active Filters Summary */}
           {hasActiveFilters() && (
             <div className="pt-4 border-t border-gray-200">
@@ -522,19 +503,6 @@ const FilterSidebar = ({
                     <button
                       onClick={() => setSortBy("newest")}
                       className="text-indigo-600 hover:text-indigo-800"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                )}
-                {negotiableOnly && (
-                  <div className="flex items-center justify-between bg-rose-50 p-2 rounded-lg">
-                    <span className="text-sm text-rose-800">
-                      🤝 Có thể thương lượng
-                    </span>
-                    <button
-                      onClick={() => setNegotiableOnly(false)}
-                      className="text-rose-600 hover:text-rose-800"
                     >
                       ✕
                     </button>
